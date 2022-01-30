@@ -1,5 +1,5 @@
 ### Mysql Results
-|  | Dirty read | Lost update | Non repeatable read | Phantom read |
+|  | Dirty read | Non repeatable read | Lost update | Phantom read |
 |---|---|---|---|---|
 | **Read Uncommitted**  | not reproduced | reproduced | reproduced | reproduced |
 | **Read Committed**    | not reproduced | reproduced | reproduced | reproduced |
