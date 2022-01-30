@@ -1,0 +1,26 @@
+networks:
+  home8:
+    driver: bridge
+    name: home8_stack
+
+volumes:
+  mysql.data:
+    name: mysql.data
+
+services:
+  mysql:
+    image: mysql:latest
+    container_name: mysql
+    restart: always
+    ports:
+      - "3308:3306"
+    env_file:
+      - env.mysql
+    networks:
+      home8:
+        aliases:
+          - mysql.local
+    volumes:
+      - mysql.data:/var/lib/mysql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./mysql.cnf:/etc/mysql/conf.d/mysql.cnf

@@ -1,0 +1,64 @@
+RUN docker exec -it mysql bash
+
+DIRTY READ:
+----------------------------Bash session 1--------------------------------------------
+mysql -uroot -proot;
+SET autocommit = 0; SET SESSION TRANSACTION ISOLATION LEVEL READ UNCOMMITTED; START TRANSACTION;
+SELECT @@SESSION.TRANSACTION_ISOLATION;
+SELECT * FROM transaction_isolation.users WHERE id = 1;
+
+----------------------------Bash session 2--------------------------------------------
+mysql -uroot -proot;
+SET autocommit = 0; SET SESSION TRANSACTION ISOLATION LEVEL READ UNCOMMITTED; START TRANSACTION;
+SELECT @@SESSION.TRANSACTION_ISOLATION;
+SELECT * FROM transaction_isolation.users WHERE id = 1;
+UPDATE transaction_isolation.users SET firstname = 'Firstname 1 - Updated' WHERE id = 1;
+SELECT * FROM transaction_isolation.users WHERE id = 1;
+ROLLBACK;
+
+
+NON REPEATABLE READ:
+----------------------------Bash session 1--------------------------------------------
+mysql -uroot -proot;
+SET autocommit = 0; SET SESSION TRANSACTION ISOLATION LEVEL READ UNCOMMITTED; START TRANSACTION;
+SELECT @@SESSION.TRANSACTION_ISOLATION;
+SELECT * FROM transaction_isolation.users WHERE id = 1;
+
+----------------------------Bash session 2--------------------------------------------
+mysql -uroot -proot;
+SET autocommit = 0; SET SESSION TRANSACTION ISOLATION LEVEL READ UNCOMMITTED; START TRANSACTION;
+SELECT @@SESSION.TRANSACTION_ISOLATION;
+UPDATE transaction_isolation.users SET firstname = 'Firstname 1 - Updated' WHERE id = 1; COMMIT;
+SELECT * FROM transaction_isolation.users WHERE id = 1;
+
+
+LOST UPDATE:
+----------------------------Bash session 1--------------------------------------------
+mysql -uroot -proot;
+SET autocommit = 0; SET SESSION TRANSACTION ISOLATION LEVEL READ UNCOMMITTED; START TRANSACTION;
+SELECT @@SESSION.TRANSACTION_ISOLATION;
+UPDATE transaction_isolation.users SET firstname = 'Firstname 1 - Updated v1' WHERE id = 1;
+COMMIT;
+SELECT * FROM transaction_isolation.users WHERE id = 1;
+
+----------------------------Bash session 2--------------------------------------------
+mysql -uroot -proot;
+SET autocommit = 0; SET SESSION TRANSACTION ISOLATION LEVEL READ UNCOMMITTED; START TRANSACTION;
+SELECT @@SESSION.TRANSACTION_ISOLATION;
+UPDATE transaction_isolation.users SET firstname = 'Firstname 1 - Updated v2' WHERE id = 1; COMMIT;
+SELECT * FROM transaction_isolation.users WHERE id = 1;
+
+
+PHANTOM READ:
+----------------------------Bash session 1--------------------------------------------
+mysql -uroot -proot;
+SET autocommit = 0; SET SESSION TRANSACTION ISOLATION LEVEL READ UNCOMMITTED; START TRANSACTION;
+SELECT @@SESSION.TRANSACTION_ISOLATION;
+SELECT * FROM transaction_isolation.users;
+
+----------------------------Bash session 2--------------------------------------------
+mysql -uroot -proot;
+SET autocommit = 0; SET SESSION TRANSACTION ISOLATION LEVEL READ UNCOMMITTED; START TRANSACTION;
+SELECT @@SESSION.TRANSACTION_ISOLATION;
+INSERT INTO transaction_isolation.users (firstname) VALUES ('Firstname 3'); COMMIT;
+SELECT * FROM transaction_isolation.users;
