@@ -25,6 +25,7 @@
 +----+-------------+
 |  1 | Firstname 1 |
 +----+-------------+
+```
 6. **[SESSION 2]** SELECT * FROM transaction_isolation.users WHERE id = 1;  
 ```
 +----+-------------+
