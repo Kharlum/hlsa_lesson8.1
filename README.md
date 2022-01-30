@@ -1,10 +1,10 @@
 ### Mysql Results (Server version: 8.0.27 MySQL Community Server - GPL)
 |  | Dirty read | Non repeatable read | Lost update | Phantom read |
 |---|---|---|---|---|
-| **Read Uncommitted**  | not reproduced | reproduced | reproduced | reproduced |
-| **Read Committed**    | not reproduced | reproduced | reproduced | reproduced |
-| [Repeatable Read](README.md#repeatable-read)   | not reproduced | not reproduced | reproduced | not reproduced |
-| **Serializable**      | not reproduced | not reproduced | reproduced | not reproduced |
+| [Read Uncommitted](README.md#read-uncommitted) | [not reproduced](README.md#dirty-read-not-reproduced-2) | [reproduced](README.md#non-repeatable-read-reproduced) | [reproduced](README.md#lost-update-reproduced-2) | [reproduced](README.md#phantom-read-reproduced) |
+| [Read Committed](README.md#read-committed) | [not reproduced](README.md#dirty-read-not-reproduced-3) | [reproduced](README.md#non-repeatable-read-reproduced-1) | [reproduced](README.md#lost-update-reproduced-3) | [reproduced](README.md#phantom-read-reproduced-1) |
+| [Repeatable Read](README.md#repeatable-read) | [not reproduced](README.md#dirty-read-not-reproduced) | [not reproduced](README.md#non-repeatable-read-not-reproduced) | [reproduced](README.md#lost-update-reproduced) | [not reproduced](README.md#phantom-read-not-reproduced) |
+| [Serializable](README.md#serializable) | [not reproduced](README.md#dirty-read-not-reproduced-1) | [not reproduced](README.md#non-repeatable-read-not-reproduced-1) | [reproduced](README.md#lost-update-reproduced-1) | [not reproduced](README.md#phantom-read-not-reproduced-1) |
 
 ## Repeatable Read
 1. **[SESSION 1]** SET autocommit = 0; SET SESSION TRANSACTION ISOLATION LEVEL REPEATABLE READ; START TRANSACTION;  
